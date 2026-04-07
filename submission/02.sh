@@ -6,5 +6,5 @@ transaction="01000000000101c8b0928edebbec5e698d5f86d0474595d9f6a5b2e4e3772cd9d10
 
 INPUTS=$(bitcoin-cli -regtest decoderawtransaction "$transaction" | jq -c '. as $tx | .vout | map({txid: $tx.txid, vout: .n})')
 OUTPUTS='[{"2MvLcssW49n9atmksjwg2ZCMsEMsoj3pzUP":0.2}]'
-# 2 weeks = 2016 blocks. 2016 + 25 = 2041
-bitcoin-cli -regtest createrawtransaction "$INPUTS" "$OUTPUTS" 2041
+# Locktime 2041 and Replaceable=true (which sets matching sequence numbers)
+bitcoin-cli -regtest createrawtransaction "$INPUTS" "$OUTPUTS" 2041 true

@@ -6,5 +6,6 @@ transaction="01000000000101c8b0928edebbec5e698d5f86d0474595d9f6a5b2e4e3772cd9d10
 
 INPUTS=$(bitcoin-cli -regtest decoderawtransaction "$transaction" | jq -c '. as $tx | .vout | map({txid: $tx.txid, vout: .n})')
 MESSAGE_HEX=$(echo -n "btrust builder 2026" | xxd -p | tr -d '\n')
-OUTPUTS="[{\"2MvLcssW49n9atmksjwg2ZCMsEMsoj3pzUP\":0.2}, {\"data\":\"$MESSAGE_HEX\"}]"
-bitcoin-cli -regtest createrawtransaction "$INPUTS" "$OUTPUTS"
+OUTPUTS="[{\"data\":\"$MESSAGE_HEX\"}, {\"2MvLcssW49n9atmksjwg2ZCMsEMsoj3pzUP\":0.2}]"
+# Locktime 0 and Replaceable=true (which sets matching sequence numbers)
+bitcoin-cli -regtest createrawtransaction "$INPUTS" "$OUTPUTS" 0 true
